@@ -28,10 +28,10 @@ Last updated on 	Feb  1, 2017
 //OUTPUT Configurations
 #define PUSH_PULL				0X00
 #define	OPEN_DRAIN				0X01
-#define AF_PUSH_PULL			0X02
-#define AF_OPEN_DRAIN			0X03
+#define AF_PUSH_PULL				0X02
+#define AF_OPEN_DRAIN				0X03
 
-#define DEFAULT_CONFIG			0X01		//Default config is nothing is specified by the user for input or output
+#define DEFAULT_CONFIG				0X01		//Default config is nothing is specified by the user for input or output
 
 //MODE BITS
 #define INPUT 					0x00
@@ -101,11 +101,11 @@ private void setGPIOODR(GPIO_Pin pin, uint8_t bitValue){
 	pin.port->ODR = (pin.port->ODR & ~0x01<<pin.pin)|(bitValue<<pin.pin);
 }
 
-private void set
 
+//Check that the GPIO clocks are running for the given pin/port
 private void checkGPIOClock(GPIO_Pin pin){
 	//declare any variables
-	uint8_t port;
+	uint32_t port;
 	
 	//Check to see that the RCC has been update to run the correct clock for the GPIO port selected
 	switch(pin.port){
