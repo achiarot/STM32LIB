@@ -67,9 +67,9 @@ public void gpioInput(GPIO_Pin pin, uint8_t configuration
 
 )
 
-
-
-
+public void gpioOutput(GPIO_pin pin){
+	
+}
 
 private void gpioInputPull(GPIO_Pin pin, uint8_t configuration, uint8_t pull){
 	//Set the bits in the configuration register
@@ -78,7 +78,9 @@ private void gpioInputPull(GPIO_Pin pin, uint8_t configuration, uint8_t pull){
 	setGPIOODR(pin, pull);
 }
 
-//////////		Private classes modifying the GPIO registers		//////////
+
+//////////					Private register functions				//////////
+
 //Setup the configuration register of the GPIO port and pin specified
 private void setGPIOCR(GPIO_Pin pin, uint8_t mode, uint8_t Configuration){
 	//First we will set the configuration register for the gpio port selected
@@ -89,7 +91,53 @@ private void setGPIOCR(GPIO_Pin pin, uint8_t mode, uint8_t Configuration){
 	Else{
 		pin.port->CRH = (pin.port->CRL & ~0x0F<<(pin.pin*4)) | ((mode<<(pin.pin*4))|(configuration<<(2+(pin.pin*4))));
 	}
+	
+	checkGPIOClock(pin);
+		
 }
+
+private void setGPIOODR(GPIO_Pin pin, uint8_t bitValue){
+	//now we will set the ouput data register to hi or low
+	pin.port->ODR = (pin.port->ODR & ~0x01<<pin.pin)|(bitValue<<pin.pin);
+}
+
+private void set
+
+private void checkGPIOClock(GPIO_Pin pin){
+	//declare any variables
+	uint8_t port;
+	
+	//Check to see that the RCC has been update to run the correct clock for the GPIO port selected
+	switch(pin.port){
+		case GPIOA:
+			port = IOPAEN;
+			break;
+		case GPIOB:
+			port = IOPBEN;
+			break;
+		case GPIOC:
+			port = IOPCEN;
+			break;
+		case GPIOD:
+			port = IOPDEN;
+			break;
+		case GPIOE:
+			port = IOPEEN;
+			break;
+		case GPIOF:
+			port = IOPFEN;
+			break;
+		case GPIOG:
+			port = IOPGEN;
+			break;
+	}
+	//See if the port clock has been started already
+	if(~(RCC->APB2ENR) & port){
+		//Start the port
+		RCC->APB2ENR |= port;
+	}
+}
+
 
 
 
