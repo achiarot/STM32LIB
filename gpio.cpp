@@ -147,7 +147,7 @@ class GPIO{
 				pin.port->CRL = (pin.port->CRL & ~0x0F<<(pin.pin*4)) | ((mode<<(pin.pin*4))|(configuration<<(2+(pin.pin*4))));
 			}
 			else{
-				pin.port->CRH = (pin.port->CRL & ~0x0F<<(pin.pin*4)) | ((mode<<(pin.pin*4))|(configuration<<(2+(pin.pin*4))));
+				pin.port->CRH = (pin.port->CRL & ~0x0F<<((pin.pin-8)*4)) | ((mode<<((pin.pin-8)*4))|(configuration<<(2+((pin.pin-8)*4))));
 			}
 		}
 			
